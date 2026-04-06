@@ -1,0 +1,713 @@
+<?php
+  $bot_name    = "วิล เซอร์ฟอท (Bot)";
+  $store_name  = "BPXZ STORE";
+  $support     = "SUPPORT";
+  $client_id   = "1467101968068776199";
+  $bot_invite  = "https://discord.com/oauth2/authorize?client_id={$client_id}&permissions=8&integration_type=0&scope=bot";
+  $server_inv  = "https://discord.gg/t6gxZYzMQT";
+  $server_inv2 = "https://discord.gg/BaU4wUmmME";
+  $year        = date("Y");
+  $bot_gif     = "https://s13.gifyu.com/images/bqz8Z.gif";
+  $dev_gif     = "https://s13.gifyu.com/images/bqz8a.gif";
+
+  $features = [
+    ["icon"=>"🔊","title"=>"ออนช่อง Voice อัตโนมัติ",  "desc"=>"บอทออนช่อง Voice ตลอด 24 ชม. ถ้าหลุดออกจากช่อง ระบบจะกลับเข้าใหม่อัตโนมัติทันที"],
+    ["icon"=>"✏️","title"=>"เปลี่ยนชื่อช่องตามเวลา",   "desc"=>"ตั้งตารางให้บอทเปลี่ยนชื่อห้อง Voice อัตโนมัติ เช่น เปิด/ปิด ตามช่วงเวลาที่กำหนด"],
+    ["icon"=>"📊","title"=>"Dashboard แบบ Embed",       "desc"=>"ควบคุมบอทผ่านปุ่มใน Discord ได้เลย ไม่ต้องพิมพ์คำสั่ง ดูสถานะและตั้งค่าได้ในที่เดียว"],
+    ["icon"=>"🚫","title"=>"ระบบ Blacklist",            "desc"=>"แบนคน ยศ หรือเซิร์ฟเวอร์ไม่ให้ใช้บอทได้ มีระบบป้องกันการใช้งานในทางที่ผิด"],
+    ["icon"=>"📨","title"=>"ส่ง DM อัจฉริยะ",          "desc"=>"ส่งข้อความ DM หาคนเดียว หรือ DM ทุกคนในเซิร์ฟพร้อมกัน เฉพาะเจ้าของเซิร์ฟเท่านั้น"],
+    ["icon"=>"💾","title"=>"ฐานข้อมูล SQLite",         "desc"=>"ตั้งค่าทุกอย่างถูกบันทึกลง Database รีสตาร์ทบอทข้อมูลไม่หาย โหลดค่าคืนอัตโนมัติ"],
+  ];
+
+  $commands = [
+    ["icon"=>"⚙️","cmd"=>"/setup",     "badge"=>"all",   "label"=>"ทุกคน",        "desc"=>"เปิดแผงควบคุม Dashboard ตั้งค่า VC, ตาราง และ Blacklist ได้ครบในที่เดียว"],
+    ["icon"=>"💬","cmd"=>"/say",       "badge"=>"all",   "label"=>"ทุกคน",        "desc"=>"ให้บอทส่งข้อความแทนคุณไปยังช่องที่เลือก รองรับการเลือกช่องปลายทางได้เอง"],
+    ["icon"=>"📩","cmd"=>"/dm send",   "badge"=>"all",   "label"=>"ทุกคน",        "desc"=>"ส่ง DM ส่วนตัวไปหาสมาชิกคนใดก็ได้ผ่าน User ID พร้อมระบุข้อความที่ต้องการ"],
+    ["icon"=>"📢","cmd"=>"/dm all",    "badge"=>"admin", "label"=>"เจ้าของเซิร์ฟ","desc"=>"DM ทุกคนในเซิร์ฟพร้อมกัน เหมาะสำหรับประกาศสำคัญ เฉพาะเจ้าของเซิร์ฟเวอร์"],
+    ["icon"=>"👑","cmd"=>"/dashboard", "badge"=>"owner", "label"=>"Owner",         "desc"=>"ดูภาพรวมเซิร์ฟเวอร์ทั้งหมด จัดการ Blacklist Guild และส่ง DM เจ้าของเซิร์ฟทุกเซิร์ฟ"],
+  ];
+
+  $typewriter_phrases = json_encode([
+    'ดูแลเซิร์ฟเวอร์ตลอด 24 ชั่วโมง 🌙',
+    'ออนช่อง Voice อัตโนมัติ ไม่มีหลุด 🔊',
+    'เปลี่ยนชื่อช่องตามตารางเวลา ✏️',
+    'ระบบ Blacklist คน ยศ และเซิร์ฟ 🚫',
+    'ส่ง DM ทุกคนในเซิร์ฟได้พร้อมกัน 📨',
+    'ควบคุมผ่าน Dashboard ใน Discord 📊',
+    'บอทคนไทย โดย ' . $store_name . ' 💙',
+  ]);
+?>
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title><?= $bot_name ?> — ดูแลเซิร์ฟเวอร์ตลอด 24 ชั่วโมง</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700;900&family=Itim&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pink:    #ffb3d1;
+      --pink2:   #ff85b3;
+      --peach:   #ffd6b0;
+      --lav:     #c9b8ff;
+      --lav2:    #b0a0ff;
+      --mint:    #b8f0e0;
+      --sky:     #b8e0ff;
+      --sky2:    #85c8ff;
+      --yellow:  #fff0a0;
+      --cream:   #fffaf4;
+      --white:   #ffffff;
+      --text:    #6b4f6b;
+      --muted:   #a890a8;
+      --soft:    #e8d8f0;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Itim', cursive;
+      background: var(--cream);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 600px 500px at 10% 15%,  rgba(255,179,209,0.35) 0%, transparent 70%),
+        radial-gradient(ellipse 500px 400px at 90% 10%,  rgba(201,184,255,0.35) 0%, transparent 70%),
+        radial-gradient(ellipse 400px 500px at 80% 85%,  rgba(184,240,224,0.35) 0%, transparent 70%),
+        radial-gradient(ellipse 500px 350px at 5%  80%,  rgba(184,224,255,0.30) 0%, transparent 70%),
+        radial-gradient(ellipse 300px 300px at 50% 50%,  rgba(255,240,160,0.20) 0%, transparent 70%);
+    }
+
+    .bg-shapes { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .shape {
+      position: absolute; border-radius: 50%; opacity: 0.18;
+      animation: shape-float ease-in-out infinite;
+    }
+    @keyframes shape-float {
+      0%,100% { transform: translateY(0) rotate(0deg) scale(1); }
+      33%      { transform: translateY(-30px) rotate(120deg) scale(1.05); }
+      66%      { transform: translateY(15px) rotate(240deg) scale(0.97); }
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+      height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2.5rem;
+      background: rgba(255,250,244,0.82);
+      backdrop-filter: blur(20px);
+      border-bottom: 2px solid rgba(255,179,209,0.3);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: .6rem;
+      font-family: 'Kanit', sans-serif; font-weight: 900; font-size: 1rem;
+      color: var(--pink2); text-decoration: none;
+    }
+    .nav-logo-blob {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--pink), var(--lav));
+      border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+      display: flex; align-items: center; justify-content: center; font-size: 1rem;
+      box-shadow: 0 4px 14px rgba(255,133,179,0.4);
+      animation: blob-morph 5s ease-in-out infinite;
+    }
+    @keyframes blob-morph {
+      0%,100% { border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%; }
+      25%      { border-radius: 40% 60% 45% 55% / 60% 40% 60% 40%; }
+      50%      { border-radius: 50% 50% 60% 40% / 40% 60% 50% 50%; }
+      75%      { border-radius: 55% 45% 40% 60% / 55% 45% 60% 40%; }
+    }
+    nav ul { display: flex; gap: .2rem; list-style: none; }
+    nav ul li a {
+      font-size: .83rem; color: var(--muted); padding: .3rem .85rem;
+      border-radius: 20px; text-decoration: none; transition: all .2s;
+    }
+    nav ul li a:hover { color: var(--pink2); background: rgba(255,179,209,0.2); }
+    .nav-cta {
+      display: flex; align-items: center; gap: .4rem;
+      background: linear-gradient(135deg, var(--pink), var(--lav));
+      color: var(--white); font-size: .82rem; font-weight: 700;
+      padding: .42rem 1.3rem; border-radius: 30px;
+      text-decoration: none; transition: all .25s;
+      box-shadow: 0 4px 16px rgba(255,133,179,0.35);
+    }
+    .nav-cta:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 8px 24px rgba(255,133,179,0.5); }
+
+    /* HERO */
+    .hero {
+      position: relative; z-index: 1; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 80px 2rem 4rem;
+    }
+    .hero-inner {
+      display: flex; align-items: center; gap: 5rem;
+      max-width: 1080px; width: 100%;
+    }
+
+    /* AVATAR */
+    .avatar-area {
+      flex-shrink: 0;
+      display: flex; flex-direction: column; align-items: center; gap: 1.2rem;
+    }
+    .avatar-wrap { position: relative; width: 280px; height: 280px; }
+
+    .av-blob-ring {
+      position: absolute; inset: -18px;
+      background: linear-gradient(135deg, var(--pink), var(--lav), var(--mint), var(--sky), var(--pink));
+      background-size: 300% 300%;
+      border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+      animation: blob-morph 6s ease-in-out infinite, gradient-shift 4s linear infinite;
+      box-shadow: 0 0 40px rgba(255,133,179,0.3);
+    }
+    @keyframes gradient-shift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .av-blob-ring2 {
+      position: absolute; inset: -6px;
+      background: var(--cream);
+      border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+      animation: blob-morph 6s ease-in-out infinite;
+    }
+    .avatar-img-wrap {
+      position: absolute; inset: 0; border-radius: 50%; overflow: hidden;
+      border: 4px solid var(--white);
+      box-shadow: 0 8px 32px rgba(255,133,179,0.2);
+    }
+    .avatar-img { width: 100%; height: 100%; object-fit: cover; }
+
+    .av-star {
+      position: absolute; font-size: 1.1rem; pointer-events: none;
+      animation: star-orbit ease-in-out infinite;
+    }
+    .av-star:nth-child(3) { animation-duration: 8s;  top: 10px;  left: 10px; }
+    .av-star:nth-child(4) { animation-duration: 11s; top: 10px;  right: 10px; animation-delay: -3s; }
+    .av-star:nth-child(5) { animation-duration: 9s;  bottom: 10px; left: 15px; animation-delay: -6s; }
+    .av-star:nth-child(6) { animation-duration: 12s; bottom: 10px; right: 15px; animation-delay: -1s; }
+    @keyframes star-orbit {
+      0%,100% { transform: translateY(0) scale(1); opacity: 1; }
+      50%      { transform: translateY(-14px) scale(1.3); opacity: .7; }
+    }
+
+    .avatar-status {
+      display: flex; align-items: center; gap: .6rem;
+      background: var(--white); border: 2px solid rgba(255,179,209,0.4);
+      border-radius: 30px; padding: .4rem 1.3rem;
+      font-size: .73rem; color: var(--muted);
+      box-shadow: 0 4px 16px rgba(255,133,179,0.12);
+    }
+    .dot-online {
+      width: 7px; height: 7px; border-radius: 50%; background: #5dda9b;
+      box-shadow: 0 0 6px rgba(93,218,155,0.7);
+      animation: pulse-green 2s infinite;
+    }
+    @keyframes pulse-green {
+      0%,100% { transform: scale(1); }
+      50%      { transform: scale(1.4); }
+    }
+
+    /* HERO TEXT */
+    .hero-text { flex: 1; }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: .4rem;
+      background: linear-gradient(135deg, rgba(255,179,209,0.3), rgba(201,184,255,0.3));
+      border: 1.5px solid rgba(255,133,179,0.3);
+      border-radius: 30px; padding: .3rem 1rem;
+      font-size: .72rem; color: var(--pink2); font-weight: 700;
+      margin-bottom: 1rem; animation: fadeUp .5s ease both;
+    }
+    .hero-title {
+      font-family: 'Kanit', sans-serif; font-weight: 900;
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      line-height: 1.05; margin-bottom: .5rem;
+      animation: fadeUp .5s .08s ease both;
+    }
+    .hero-title .t1 { display: block; color: var(--text); }
+    .hero-title .t2 {
+      display: block;
+      background: linear-gradient(90deg, var(--pink2), var(--lav2), var(--sky2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-sub {
+      font-size: .92rem; color: var(--muted); line-height: 1.8;
+      margin-bottom: 1.8rem; min-height: 1.6rem;
+      animation: fadeUp .5s .16s ease both;
+    }
+    #typed { color: var(--pink2); font-weight: 700; }
+    .cursor-blink {
+      display: inline-block; width: 3px; height: .9em;
+      background: linear-gradient(180deg, var(--pink), var(--lav));
+      border-radius: 2px; vertical-align: middle;
+      animation: blink .9s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    .hero-stats {
+      display: flex; gap: .7rem; flex-wrap: wrap;
+      margin-bottom: 2rem; animation: fadeUp .5s .24s ease both;
+    }
+    .stat-pill {
+      background: var(--white); border: 2px solid rgba(255,179,209,0.3);
+      border-radius: 20px; padding: .65rem 1.3rem; text-align: center;
+      box-shadow: 0 4px 14px rgba(255,133,179,0.1); transition: transform .2s;
+    }
+    .stat-pill:hover { transform: translateY(-3px) rotate(-1deg); }
+    .stat-pill .num {
+      font-family: 'Kanit', sans-serif; font-size: 1.4rem; font-weight: 900;
+      background: linear-gradient(135deg, var(--pink2), var(--lav2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      line-height: 1;
+    }
+    .stat-pill .lbl { font-size: .64rem; color: var(--muted); margin-top: .15rem; }
+
+    .hero-btns {
+      display: flex; gap: .8rem; flex-wrap: wrap;
+      animation: fadeUp .5s .32s ease both;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: .45rem;
+      padding: .72rem 1.6rem; border-radius: 30px;
+      font-family: 'Itim', cursive; font-size: .92rem;
+      text-decoration: none; transition: all .25s;
+      border: 2px solid transparent; cursor: pointer;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--pink), var(--lav));
+      color: var(--white);
+      box-shadow: 0 6px 20px rgba(255,133,179,0.35);
+    }
+    .btn-primary:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 10px 28px rgba(255,133,179,0.5); }
+    .btn-soft {
+      background: var(--white); border-color: rgba(201,184,255,0.5); color: var(--lav2);
+      box-shadow: 0 4px 14px rgba(201,184,255,0.15);
+    }
+    .btn-soft:hover { background: rgba(201,184,255,0.12); transform: translateY(-3px); }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+
+    /* WAVY */
+    .wavy { position: relative; z-index: 1; line-height: 0; }
+    .wavy svg { display: block; width: 100%; }
+
+    /* SECTIONS */
+    section { position: relative; z-index: 1; padding: 5rem 2rem; }
+    #features { background: var(--white); }
+    #commands { background: linear-gradient(160deg, #fdf0f8, #f5f0ff, #f0fbff); }
+    #dev      { background: var(--white); }
+
+    .container { max-width: 1020px; margin: 0 auto; }
+
+    .sec-header { text-align: center; margin-bottom: 3rem; }
+    .sec-tag {
+      display: inline-block;
+      background: linear-gradient(135deg, rgba(255,179,209,0.25), rgba(201,184,255,0.25));
+      border: 1.5px solid rgba(255,133,179,0.25);
+      border-radius: 20px; padding: .2rem .9rem;
+      font-size: .7rem; color: var(--pink2); font-weight: 700;
+      margin-bottom: .7rem; letter-spacing: .06em;
+    }
+    .sec-title {
+      font-family: 'Kanit', sans-serif; font-weight: 900;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      color: var(--text); margin-bottom: .3rem;
+    }
+    .sec-title .accent {
+      background: linear-gradient(90deg, var(--pink2), var(--lav2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .sec-sub { color: var(--muted); font-size: .84rem; }
+
+    /* FEATURES */
+    .features-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.2rem; }
+    .feat-card {
+      border: 2px solid transparent; border-radius: 24px; padding: 2rem 1.5rem;
+      transition: all .3s; position: relative; overflow: hidden; cursor: default;
+    }
+    .feat-card:nth-child(1) { background: linear-gradient(145deg,#fff0f6,#fff8fc); border-color: rgba(255,133,179,0.2); }
+    .feat-card:nth-child(2) { background: linear-gradient(145deg,#f5f0ff,#faf8ff); border-color: rgba(201,184,255,0.2); }
+    .feat-card:nth-child(3) { background: linear-gradient(145deg,#f0faff,#f8fdff); border-color: rgba(184,224,255,0.2); }
+    .feat-card:nth-child(4) { background: linear-gradient(145deg,#f0fff8,#f8fffc); border-color: rgba(184,240,224,0.2); }
+    .feat-card:nth-child(5) { background: linear-gradient(145deg,#fffaf0,#fffdf8); border-color: rgba(255,214,176,0.2); }
+    .feat-card:nth-child(6) { background: linear-gradient(145deg,#fff8f0,#fffcf8); border-color: rgba(255,179,209,0.2); }
+    .feat-card:hover { transform: translateY(-6px) rotate(-0.5deg); box-shadow: 0 16px 40px rgba(0,0,0,0.07); }
+    .feat-card:hover .feat-icon-wrap { transform: scale(1.15) rotate(10deg); }
+
+    .feat-icon-wrap {
+      width: 56px; height: 56px; border-radius: 18px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; margin-bottom: 1.1rem;
+      transition: transform .3s; box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+    }
+    .feat-card:nth-child(1) .feat-icon-wrap { background: linear-gradient(135deg,#ffd6e8,#ffb3d1); }
+    .feat-card:nth-child(2) .feat-icon-wrap { background: linear-gradient(135deg,#e0d8ff,#c9b8ff); }
+    .feat-card:nth-child(3) .feat-icon-wrap { background: linear-gradient(135deg,#d6eeff,#b8e0ff); }
+    .feat-card:nth-child(4) .feat-icon-wrap { background: linear-gradient(135deg,#c8f8e8,#b8f0e0); }
+    .feat-card:nth-child(5) .feat-icon-wrap { background: linear-gradient(135deg,#ffe8c8,#ffd6b0); }
+    .feat-card:nth-child(6) .feat-icon-wrap { background: linear-gradient(135deg,#ffd6e8,#ffb3d1); }
+
+    .feat-card h3 {
+      font-family: 'Kanit', sans-serif; font-size: .97rem; font-weight: 700;
+      color: var(--text); margin-bottom: .45rem;
+    }
+    .feat-card p { color: var(--muted); font-size: .81rem; line-height: 1.7; }
+
+    /* COMMANDS */
+    .cmd-list { display: flex; flex-direction: column; gap: .8rem; }
+    .cmd-card {
+      background: var(--white); border: 2px solid rgba(255,179,209,0.2);
+      border-radius: 18px; padding: 1.1rem 1.5rem;
+      display: flex; align-items: center; gap: 1.1rem;
+      transition: all .25s; position: relative; overflow: hidden;
+    }
+    .cmd-card::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+      background: linear-gradient(180deg, var(--pink), var(--lav));
+      border-radius: 4px 0 0 4px;
+      transform: scaleY(0); transform-origin: bottom; transition: transform .25s;
+    }
+    .cmd-card:hover { border-color: rgba(255,133,179,0.4); transform: translateX(6px); box-shadow: 0 6px 20px rgba(255,133,179,0.1); }
+    .cmd-card:hover::before { transform: scaleY(1); }
+    .cmd-icon-wrap {
+      width: 40px; height: 40px; border-radius: 14px; flex-shrink: 0;
+      background: linear-gradient(135deg,rgba(255,179,209,0.3),rgba(201,184,255,0.3));
+      display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+    }
+    .cmd-name {
+      font-family: 'Kanit', sans-serif; font-size: .93rem; font-weight: 700;
+      color: var(--pink2); min-width: 135px;
+    }
+    .cmd-desc { flex: 1; color: var(--muted); font-size: .81rem; line-height: 1.5; }
+    .cmd-badge {
+      font-size: .64rem; padding: .2rem .7rem; border-radius: 20px;
+      font-weight: 700; white-space: nowrap; flex-shrink: 0;
+    }
+    .badge-all   { background: rgba(255,179,209,0.2); color: var(--pink2); border: 1.5px solid rgba(255,133,179,0.3); }
+    .badge-admin { background: rgba(184,240,224,0.3); color: #2db88a;     border: 1.5px solid rgba(125,232,200,0.4); }
+    .badge-owner { background: rgba(255,240,160,0.4); color: #c8960a;     border: 1.5px solid rgba(255,214,50,0.4); }
+
+    /* DEV */
+    .dev-card {
+      max-width: 720px; margin: 0 auto;
+      background: linear-gradient(145deg,#fff5fa,#fff8ff);
+      border: 2px solid rgba(255,179,209,0.25);
+      border-radius: 32px; padding: 2.8rem 2.5rem;
+      display: flex; align-items: center; gap: 3rem;
+      box-shadow: 0 10px 50px rgba(255,133,179,0.1);
+      position: relative; overflow: visible;
+    }
+    .dev-card::before {
+      content: '';
+      position: absolute; top: -20px; right: -20px; width: 120px; height: 120px;
+      background: linear-gradient(135deg,rgba(255,179,209,0.3),rgba(201,184,255,0.3));
+      border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+      animation: blob-morph 7s ease-in-out infinite; z-index: 0;
+    }
+    .dev-card::after {
+      content: '';
+      position: absolute; bottom: -15px; left: -15px; width: 90px; height: 90px;
+      background: linear-gradient(135deg,rgba(184,240,224,0.35),rgba(184,224,255,0.35));
+      border-radius: 40% 60% 45% 55% / 60% 40% 55% 45%;
+      animation: blob-morph 9s ease-in-out infinite reverse; z-index: 0;
+    }
+
+    .dev-avatar-outer {
+      flex-shrink: 0; position: relative; width: 160px; height: 160px; z-index: 1;
+    }
+    .dev-crown {
+      position: absolute; top: -26px; left: 50%; transform: translateX(-50%);
+      font-size: 1.8rem; z-index: 10;
+      filter: drop-shadow(0 4px 8px rgba(255,200,0,0.4));
+      animation: crown-float 3.5s ease-in-out infinite;
+    }
+    @keyframes crown-float {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50%      { transform: translateX(-50%) translateY(-8px); }
+    }
+    .dev-blob-ring {
+      position: absolute; inset: -14px;
+      background: linear-gradient(135deg,var(--pink),var(--lav),var(--mint),var(--sky),var(--peach),var(--pink));
+      background-size: 400% 400%;
+      border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+      animation: blob-morph 5s ease-in-out infinite, gradient-shift 5s linear infinite;
+      box-shadow: 0 0 30px rgba(255,133,179,0.3);
+    }
+    .dev-blob-ring2 {
+      position: absolute; inset: -5px; background: var(--white);
+      border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+      animation: blob-morph 5s ease-in-out infinite;
+    }
+    .dev-img-wrap {
+      position: absolute; inset: 0; border-radius: 50%; overflow: hidden;
+      border: 3px solid var(--white);
+      box-shadow: 0 6px 24px rgba(255,133,179,0.2);
+    }
+    .dev-img { width: 100%; height: 100%; object-fit: cover; }
+
+    .dev-info { flex: 1; position: relative; z-index: 1; }
+    .dev-label { font-size: .67rem; color: var(--pink2); font-weight: 700; letter-spacing: .12em; margin-bottom: .35rem; text-transform: uppercase; }
+    .dev-name { font-family: 'Kanit', sans-serif; font-size: 1.7rem; font-weight: 900; color: var(--text); margin-bottom: .1rem; line-height: 1.1; }
+    .dev-role { font-size: .77rem; color: var(--muted); margin-bottom: 1rem; }
+    .dev-desc { font-size: .84rem; color: var(--muted); line-height: 1.75; margin-bottom: 1.3rem; }
+    .dev-btns { display: flex; gap: .7rem; flex-wrap: wrap; }
+
+    /* FOOTER */
+    footer {
+      position: relative; z-index: 1;
+      background: linear-gradient(160deg,#fef0f8,#f8f0ff);
+      padding: 2.2rem; text-align: center;
+      border-top: 2px solid rgba(255,179,209,0.2);
+    }
+    .footer-logo {
+      font-family: 'Kanit', sans-serif; font-weight: 900; font-size: 1rem;
+      background: linear-gradient(90deg,var(--pink2),var(--lav2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      margin-bottom: .8rem; display: inline-block;
+    }
+    .footer-links { display: flex; justify-content: center; gap: 1.8rem; margin-bottom: .8rem; }
+    .footer-links a { color: var(--muted); font-size: .78rem; text-decoration: none; transition: color .2s; }
+    .footer-links a:hover { color: var(--pink2); }
+    .footer-copy { color: var(--muted); font-size: .7rem; opacity: .6; }
+
+    /* REVEAL */
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width: 880px) {
+      .hero-inner { flex-direction: column; gap: 2.5rem; text-align: center; }
+      .hero-stats { justify-content: center; }
+      .hero-btns  { justify-content: center; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .dev-card { flex-direction: column; text-align: center; gap: 2rem; overflow: hidden; }
+      .dev-btns { justify-content: center; }
+    }
+    @media (max-width: 560px) {
+      nav ul { display: none; }
+      .features-grid { grid-template-columns: 1fr; }
+      .cmd-card { flex-wrap: wrap; }
+      .cmd-name { min-width: unset; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-shapes" id="bgShapes"></div>
+
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-blob">🌸</div>
+    <?= $bot_name ?>
+  </a>
+  <ul>
+    <li><a href="#features">ฟีเจอร์</a></li>
+    <li><a href="#commands">คำสั่ง</a></li>
+    <li><a href="#dev">Developer</a></li>
+  </ul>
+  <a href="<?= $bot_invite ?>" class="nav-cta" target="_blank">🤖 เชิญบอท</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="avatar-area">
+      <div class="avatar-wrap">
+        <div class="av-blob-ring"></div>
+        <div class="av-blob-ring2"></div>
+        <div class="av-star">✨</div>
+        <div class="av-star">⭐</div>
+        <div class="av-star">🌟</div>
+        <div class="av-star">💫</div>
+        <div class="avatar-img-wrap">
+          <img src="<?= $bot_gif ?>" alt="<?= $bot_name ?>" class="avatar-img"
+               onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'"/>
+        </div>
+      </div>
+      <div class="avatar-status">
+        <div class="dot-online"></div>
+        ONLINE · <?= $store_name ?>
+      </div>
+    </div>
+    <div class="hero-text">
+      <div class="hero-tag">✨ Discord Bot · Thailand 🇹🇭</div>
+      <h1 class="hero-title">
+        <span class="t1"><?= $bot_name ?></span>
+        <span class="t2">Discord Bot 💙</span>
+      </h1>
+      <p class="hero-sub"><span id="typed"></span><span class="cursor-blink"></span></p>
+      <div class="hero-stats">
+        <div class="stat-pill"><div class="num">24/7</div><div class="lbl">Online</div></div>
+        <div class="stat-pill"><div class="num">6+</div><div class="lbl">Features</div></div>
+        <div class="stat-pill"><div class="num">5</div><div class="lbl">Commands</div></div>
+        <div class="stat-pill"><div class="num">🛡️</div><div class="lbl">Blacklist</div></div>
+      </div>
+      <div class="hero-btns">
+        <a href="<?= $bot_invite ?>" class="btn btn-primary" target="_blank">🤖 เชิญบอทเข้าเซิร์ฟ</a>
+        <a href="<?= $server_inv2 ?>" class="btn btn-soft" target="_blank">💙 <?= $support ?></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wavy">
+  <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0 40 C240 80 480 0 720 40 C960 80 1200 0 1440 40 L1440 80 L0 80 Z" fill="#ffffff"/>
+  </svg>
+</div>
+
+<section id="features">
+  <div class="container">
+    <div class="sec-header reveal">
+      <div class="sec-tag">✨ Features</div>
+      <h2 class="sec-title">ฟีเจอร์ของ <span class="accent"><?= $bot_name ?></span></h2>
+      <p class="sec-sub">ครบทุกฟีเจอร์ที่เซิร์ฟเวอร์ต้องการ ในบอทเดียว 🌸</p>
+    </div>
+    <div class="features-grid">
+      <?php foreach ($features as $f): ?>
+      <div class="feat-card reveal">
+        <div class="feat-icon-wrap"><?= $f['icon'] ?></div>
+        <h3><?= $f['title'] ?></h3>
+        <p><?= $f['desc'] ?></p>
+      </div>
+      <?php endforeach; ?>
+    </div>
+  </div>
+</section>
+
+<div class="wavy">
+  <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0 40 C240 0 480 80 720 40 C960 0 1200 80 1440 40 L1440 80 L0 80 Z" fill="#fdf0f8"/>
+  </svg>
+</div>
+
+<section id="commands">
+  <div class="container">
+    <div class="sec-header reveal">
+      <div class="sec-tag">🎮 Commands</div>
+      <h2 class="sec-title"><span class="accent">Slash</span> Commands</h2>
+      <p class="sec-sub">คำสั่งทั้งหมดที่ใช้งานได้บน Discord 🎀</p>
+    </div>
+    <div class="cmd-list">
+      <?php foreach ($commands as $c): ?>
+      <div class="cmd-card reveal">
+        <div class="cmd-icon-wrap"><?= $c['icon'] ?></div>
+        <div class="cmd-name"><?= $c['cmd'] ?></div>
+        <div class="cmd-desc"><?= $c['desc'] ?></div>
+        <span class="cmd-badge badge-<?= $c['badge'] ?>"><?= $c['label'] ?></span>
+      </div>
+      <?php endforeach; ?>
+    </div>
+  </div>
+</section>
+
+<div class="wavy">
+  <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0 40 C240 80 480 0 720 40 C960 80 1200 0 1440 40 L1440 80 L0 80 Z" fill="#ffffff"/>
+  </svg>
+</div>
+
+<section id="dev">
+  <div class="container">
+    <div class="sec-header reveal">
+      <div class="sec-tag">🌟 Developer</div>
+      <h2 class="sec-title">เกี่ยวกับ <span class="accent">Developer</span></h2>
+      <p class="sec-sub">ผู้อยู่เบื้องหลังบอทตัวนี้ 💜</p>
+    </div>
+    <div class="dev-card reveal">
+      <div class="dev-avatar-outer">
+        <div class="dev-crown">👑</div>
+        <div class="dev-blob-ring"></div>
+        <div class="dev-blob-ring2"></div>
+        <div class="dev-img-wrap">
+          <img src="<?= $dev_gif ?>" alt="bpxz_store_x2" class="dev-img"
+               onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'"/>
+        </div>
+      </div>
+      <div class="dev-info">
+        <div class="dev-label">✦ BOT OWNER</div>
+        <div class="dev-name">bpxz_store_x2</div>
+        <div class="dev-role">Developer · <?= $store_name ?></div>
+        <p class="dev-desc">
+          ผู้พัฒนา <?= $bot_name ?> มุ่งเน้นสร้างระบบ Discord ที่ทันสมัย เสถียรสูง
+          มีระบบความปลอดภัยแข็งแกร่ง รองรับหลายเซิร์ฟเวอร์พร้อมกัน 💙
+        </p>
+        <div class="dev-btns">
+          <a href="<?= $server_inv ?>" class="btn btn-soft" target="_blank" style="font-size:.83rem;padding:.5rem 1.2rem;">💙 <?= $store_name ?></a>
+          <a href="<?= $bot_invite ?>" class="btn btn-primary" target="_blank" style="font-size:.83rem;padding:.5rem 1.2rem;">🤖 เชิญบอท</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo"><?= $bot_name ?></div>
+  <div class="footer-links">
+    <a href="<?= $server_inv ?>"  target="_blank"><?= $store_name ?></a>
+    <a href="<?= $server_inv2 ?>" target="_blank"><?= $support ?></a>
+    <a href="<?= $bot_invite ?>"  target="_blank">INVITE BOT</a>
+  </div>
+  <div class="footer-copy">© <?= $year ?> <?= $store_name ?> · <?= $bot_name ?> · All rights reserved 💙</div>
+</footer>
+
+<script>
+/* BG SHAPES */
+(function(){
+  const wrap = document.getElementById('bgShapes');
+  const colors = [
+    'rgba(255,179,209,1)','rgba(201,184,255,1)','rgba(184,224,255,1)',
+    'rgba(184,240,224,1)','rgba(255,214,176,1)','rgba(255,240,160,1)'
+  ];
+  for(let i=0;i<14;i++){
+    const s = document.createElement('div');
+    s.className = 'shape';
+    const size = 80 + Math.random()*180;
+    const c = colors[Math.floor(Math.random()*colors.length)];
+    const r = ()=> 40+Math.random()*30;
+    s.style.cssText = `
+      width:${size}px;height:${size}px;
+      left:${Math.random()*100}%;top:${Math.random()*100}%;
+      background:${c};
+      animation-duration:${10+Math.random()*12}s;
+      animation-delay:-${Math.random()*8}s;
+      border-radius:${r()}% ${r()}% ${r()}% ${r()}% / ${r()}% ${r()}% ${r()}% ${r()}%;
+    `;
+    wrap.appendChild(s);
+  }
+})();
+
+/* TYPEWRITER */
+const phrases = <?= $typewriter_phrases ?>;
+let pIdx=0,cIdx=0,del=false;
+const typedEl=document.getElementById('typed');
+function type(){
+  const p=phrases[pIdx];
+  if(!del){
+    typedEl.textContent=p.slice(0,++cIdx);
+    if(cIdx===p.length){del=true;setTimeout(type,2200);return;}
+    setTimeout(type,65);
+  } else {
+    typedEl.textContent=p.slice(0,--cIdx);
+    if(cIdx===0){del=false;pIdx=(pIdx+1)%phrases.length;setTimeout(type,400);return;}
+    setTimeout(type,28);
+  }
+}
+type();
+
+/* SCROLL REVEAL */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting) setTimeout(()=>e.target.classList.add('visible'),i*70);
+  });
+},{threshold:0.07});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
