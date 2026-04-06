@@ -1,48 +1,9 @@
-<?php
-  $bot_name    = "วิล เซอร์ฟอท (Bot)";
-  $store_name  = "BPXZ STORE";
-  $support     = "SUPPORT";
-  $client_id   = "1467101968068776199";
-  $bot_invite  = "https://discord.com/oauth2/authorize?client_id={$client_id}&permissions=8&integration_type=0&scope=bot";
-  $server_inv  = "https://discord.gg/t6gxZYzMQT";
-  $server_inv2 = "https://discord.gg/BaU4wUmmME";
-  $year        = date("Y");
-  $bot_gif     = "https://s13.gifyu.com/images/bqz8Z.gif";
-  $dev_gif     = "https://s13.gifyu.com/images/bqz8a.gif";
-
-  $features = [
-    ["icon"=>"🔊","title"=>"ออนช่อง Voice อัตโนมัติ",  "desc"=>"บอทออนช่อง Voice ตลอด 24 ชม. ถ้าหลุดออกจากช่อง ระบบจะกลับเข้าใหม่อัตโนมัติทันที"],
-    ["icon"=>"✏️","title"=>"เปลี่ยนชื่อช่องตามเวลา",   "desc"=>"ตั้งตารางให้บอทเปลี่ยนชื่อห้อง Voice อัตโนมัติ เช่น เปิด/ปิด ตามช่วงเวลาที่กำหนด"],
-    ["icon"=>"📊","title"=>"Dashboard แบบ Embed",       "desc"=>"ควบคุมบอทผ่านปุ่มใน Discord ได้เลย ไม่ต้องพิมพ์คำสั่ง ดูสถานะและตั้งค่าได้ในที่เดียว"],
-    ["icon"=>"🚫","title"=>"ระบบ Blacklist",            "desc"=>"แบนคน ยศ หรือเซิร์ฟเวอร์ไม่ให้ใช้บอทได้ มีระบบป้องกันการใช้งานในทางที่ผิด"],
-    ["icon"=>"📨","title"=>"ส่ง DM อัจฉริยะ",          "desc"=>"ส่งข้อความ DM หาคนเดียว หรือ DM ทุกคนในเซิร์ฟพร้อมกัน เฉพาะเจ้าของเซิร์ฟเท่านั้น"],
-    ["icon"=>"💾","title"=>"ฐานข้อมูล SQLite",         "desc"=>"ตั้งค่าทุกอย่างถูกบันทึกลง Database รีสตาร์ทบอทข้อมูลไม่หาย โหลดค่าคืนอัตโนมัติ"],
-  ];
-
-  $commands = [
-    ["icon"=>"⚙️","cmd"=>"/setup",     "badge"=>"all",   "label"=>"ทุกคน",        "desc"=>"เปิดแผงควบคุม Dashboard ตั้งค่า VC, ตาราง และ Blacklist ได้ครบในที่เดียว"],
-    ["icon"=>"💬","cmd"=>"/say",       "badge"=>"all",   "label"=>"ทุกคน",        "desc"=>"ให้บอทส่งข้อความแทนคุณไปยังช่องที่เลือก รองรับการเลือกช่องปลายทางได้เอง"],
-    ["icon"=>"📩","cmd"=>"/dm send",   "badge"=>"all",   "label"=>"ทุกคน",        "desc"=>"ส่ง DM ส่วนตัวไปหาสมาชิกคนใดก็ได้ผ่าน User ID พร้อมระบุข้อความที่ต้องการ"],
-    ["icon"=>"📢","cmd"=>"/dm all",    "badge"=>"admin", "label"=>"เจ้าของเซิร์ฟ","desc"=>"DM ทุกคนในเซิร์ฟพร้อมกัน เหมาะสำหรับประกาศสำคัญ เฉพาะเจ้าของเซิร์ฟเวอร์"],
-    ["icon"=>"👑","cmd"=>"/dashboard", "badge"=>"owner", "label"=>"Owner",         "desc"=>"ดูภาพรวมเซิร์ฟเวอร์ทั้งหมด จัดการ Blacklist Guild และส่ง DM เจ้าของเซิร์ฟทุกเซิร์ฟ"],
-  ];
-
-  $typewriter_phrases = json_encode([
-    'ดูแลเซิร์ฟเวอร์ตลอด 24 ชั่วโมง 🌙',
-    'ออนช่อง Voice อัตโนมัติ ไม่มีหลุด 🔊',
-    'เปลี่ยนชื่อช่องตามตารางเวลา ✏️',
-    'ระบบ Blacklist คน ยศ และเซิร์ฟ 🚫',
-    'ส่ง DM ทุกคนในเซิร์ฟได้พร้อมกัน 📨',
-    'ควบคุมผ่าน Dashboard ใน Discord 📊',
-    'บอทคนไทย โดย ' . $store_name . ' 💙',
-  ]);
-?>
 <!DOCTYPE html>
 <html lang="th">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title><?= $bot_name ?> — ดูแลเซิร์ฟเวอร์ตลอด 24 ชั่วโมง</title>
+  <title>วิล เซอร์ฟอท (Bot) — ดูแลเซิร์ฟเวอร์ตลอด 24 ชั่วโมง</title>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700;900&family=Itim&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -505,14 +466,14 @@
 <nav>
   <a href="#" class="nav-logo">
     <div class="nav-logo-blob">🌸</div>
-    <?= $bot_name ?>
+    วิล เซอร์ฟอท (Bot)
   </a>
   <ul>
     <li><a href="#features">ฟีเจอร์</a></li>
     <li><a href="#commands">คำสั่ง</a></li>
     <li><a href="#dev">Developer</a></li>
   </ul>
-  <a href="<?= $bot_invite ?>" class="nav-cta" target="_blank">🤖 เชิญบอท</a>
+  <a href="https://discord.com/oauth2/authorize?client_id=1467101968068776199&permissions=8&integration_type=0&scope=bot" class="nav-cta" target="_blank">🤖 เชิญบอท</a>
 </nav>
 
 <section class="hero">
@@ -526,19 +487,19 @@
         <div class="av-star">🌟</div>
         <div class="av-star">💫</div>
         <div class="avatar-img-wrap">
-          <img src="<?= $bot_gif ?>" alt="<?= $bot_name ?>" class="avatar-img"
+          <img src="https://s13.gifyu.com/images/bqz8Z.gif" alt="วิล เซอร์ฟอท (Bot)" class="avatar-img"
                onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'"/>
         </div>
       </div>
       <div class="avatar-status">
         <div class="dot-online"></div>
-        ONLINE · <?= $store_name ?>
+        ONLINE · BPXZ STORE
       </div>
     </div>
     <div class="hero-text">
       <div class="hero-tag">✨ Discord Bot · Thailand 🇹🇭</div>
       <h1 class="hero-title">
-        <span class="t1"><?= $bot_name ?></span>
+        <span class="t1">วิล เซอร์ฟอท (Bot)</span>
         <span class="t2">Discord Bot 💙</span>
       </h1>
       <p class="hero-sub"><span id="typed"></span><span class="cursor-blink"></span></p>
@@ -549,8 +510,8 @@
         <div class="stat-pill"><div class="num">🛡️</div><div class="lbl">Blacklist</div></div>
       </div>
       <div class="hero-btns">
-        <a href="<?= $bot_invite ?>" class="btn btn-primary" target="_blank">🤖 เชิญบอทเข้าเซิร์ฟ</a>
-        <a href="<?= $server_inv2 ?>" class="btn btn-soft" target="_blank">💙 <?= $support ?></a>
+        <a href="https://discord.com/oauth2/authorize?client_id=1467101968068776199&permissions=8&integration_type=0&scope=bot" class="btn btn-primary" target="_blank">🤖 เชิญบอทเข้าเซิร์ฟ</a>
+        <a href="https://discord.gg/BaU4wUmmME" class="btn btn-soft" target="_blank">💙 SUPPORT</a>
       </div>
     </div>
   </div>
@@ -566,17 +527,40 @@
   <div class="container">
     <div class="sec-header reveal">
       <div class="sec-tag">✨ Features</div>
-      <h2 class="sec-title">ฟีเจอร์ของ <span class="accent"><?= $bot_name ?></span></h2>
+      <h2 class="sec-title">ฟีเจอร์ของ <span class="accent">วิล เซอร์ฟอท (Bot)</span></h2>
       <p class="sec-sub">ครบทุกฟีเจอร์ที่เซิร์ฟเวอร์ต้องการ ในบอทเดียว 🌸</p>
     </div>
     <div class="features-grid">
-      <?php foreach ($features as $f): ?>
       <div class="feat-card reveal">
-        <div class="feat-icon-wrap"><?= $f['icon'] ?></div>
-        <h3><?= $f['title'] ?></h3>
-        <p><?= $f['desc'] ?></p>
+        <div class="feat-icon-wrap">🔊</div>
+        <h3>ออนช่อง Voice อัตโนมัติ</h3>
+        <p>บอทออนช่อง Voice ตลอด 24 ชม. ถ้าหลุดออกจากช่อง ระบบจะกลับเข้าใหม่อัตโนมัติทันที</p>
       </div>
-      <?php endforeach; ?>
+      <div class="feat-card reveal">
+        <div class="feat-icon-wrap">✏️</div>
+        <h3>เปลี่ยนชื่อช่องตามเวลา</h3>
+        <p>ตั้งตารางให้บอทเปลี่ยนชื่อห้อง Voice อัตโนมัติ เช่น เปิด/ปิด ตามช่วงเวลาที่กำหนด</p>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon-wrap">📊</div>
+        <h3>Dashboard แบบ Embed</h3>
+        <p>ควบคุมบอทผ่านปุ่มใน Discord ได้เลย ไม่ต้องพิมพ์คำสั่ง ดูสถานะและตั้งค่าได้ในที่เดียว</p>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon-wrap">🚫</div>
+        <h3>ระบบ Blacklist</h3>
+        <p>แบนคน ยศ หรือเซิร์ฟเวอร์ไม่ให้ใช้บอทได้ มีระบบป้องกันการใช้งานในทางที่ผิด</p>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon-wrap">📨</div>
+        <h3>ส่ง DM อัจฉริยะ</h3>
+        <p>ส่งข้อความ DM หาคนเดียว หรือ DM ทุกคนในเซิร์ฟพร้อมกัน เฉพาะเจ้าของเซิร์ฟเท่านั้น</p>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon-wrap">💾</div>
+        <h3>ฐานข้อมูล SQLite</h3>
+        <p>ตั้งค่าทุกอย่างถูกบันทึกลง Database รีสตาร์ทบอทข้อมูลไม่หาย โหลดค่าคืนอัตโนมัติ</p>
+      </div>
     </div>
   </div>
 </section>
@@ -595,14 +579,36 @@
       <p class="sec-sub">คำสั่งทั้งหมดที่ใช้งานได้บน Discord 🎀</p>
     </div>
     <div class="cmd-list">
-      <?php foreach ($commands as $c): ?>
       <div class="cmd-card reveal">
-        <div class="cmd-icon-wrap"><?= $c['icon'] ?></div>
-        <div class="cmd-name"><?= $c['cmd'] ?></div>
-        <div class="cmd-desc"><?= $c['desc'] ?></div>
-        <span class="cmd-badge badge-<?= $c['badge'] ?>"><?= $c['label'] ?></span>
+        <div class="cmd-icon-wrap">⚙️</div>
+        <div class="cmd-name">/setup</div>
+        <div class="cmd-desc">เปิดแผงควบคุม Dashboard ตั้งค่า VC, ตาราง และ Blacklist ได้ครบในที่เดียว</div>
+        <span class="cmd-badge badge-all">ทุกคน</span>
       </div>
-      <?php endforeach; ?>
+      <div class="cmd-card reveal">
+        <div class="cmd-icon-wrap">💬</div>
+        <div class="cmd-name">/say</div>
+        <div class="cmd-desc">ให้บอทส่งข้อความแทนคุณไปยังช่องที่เลือก รองรับการเลือกช่องปลายทางได้เอง</div>
+        <span class="cmd-badge badge-all">ทุกคน</span>
+      </div>
+      <div class="cmd-card reveal">
+        <div class="cmd-icon-wrap">📩</div>
+        <div class="cmd-name">/dm send</div>
+        <div class="cmd-desc">ส่ง DM ส่วนตัวไปหาสมาชิกคนใดก็ได้ผ่าน User ID พร้อมระบุข้อความที่ต้องการ</div>
+        <span class="cmd-badge badge-all">ทุกคน</span>
+      </div>
+      <div class="cmd-card reveal">
+        <div class="cmd-icon-wrap">📢</div>
+        <div class="cmd-name">/dm all</div>
+        <div class="cmd-desc">DM ทุกคนในเซิร์ฟพร้อมกัน เหมาะสำหรับประกาศสำคัญ เฉพาะเจ้าของเซิร์ฟเวอร์</div>
+        <span class="cmd-badge badge-admin">เจ้าของเซิร์ฟ</span>
+      </div>
+      <div class="cmd-card reveal">
+        <div class="cmd-icon-wrap">👑</div>
+        <div class="cmd-name">/dashboard</div>
+        <div class="cmd-desc">ดูภาพรวมเซิร์ฟเวอร์ทั้งหมด จัดการ Blacklist Guild และส่ง DM เจ้าของเซิร์ฟทุกเซิร์ฟ</div>
+        <span class="cmd-badge badge-owner">Owner</span>
+      </div>
     </div>
   </div>
 </section>
@@ -626,21 +632,21 @@
         <div class="dev-blob-ring"></div>
         <div class="dev-blob-ring2"></div>
         <div class="dev-img-wrap">
-          <img src="<?= $dev_gif ?>" alt="bpxz_store_x2" class="dev-img"
+          <img src="https://s13.gifyu.com/images/bqz8a.gif" alt="bpxz_store_x2" class="dev-img"
                onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'"/>
         </div>
       </div>
       <div class="dev-info">
         <div class="dev-label">✦ BOT OWNER</div>
         <div class="dev-name">bpxz_store_x2</div>
-        <div class="dev-role">Developer · <?= $store_name ?></div>
+        <div class="dev-role">Developer · BPXZ STORE</div>
         <p class="dev-desc">
-          ผู้พัฒนา <?= $bot_name ?> มุ่งเน้นสร้างระบบ Discord ที่ทันสมัย เสถียรสูง
+          ผู้พัฒนา วิล เซอร์ฟอท (Bot) มุ่งเน้นสร้างระบบ Discord ที่ทันสมัย เสถียรสูง
           มีระบบความปลอดภัยแข็งแกร่ง รองรับหลายเซิร์ฟเวอร์พร้อมกัน 💙
         </p>
         <div class="dev-btns">
-          <a href="<?= $server_inv ?>" class="btn btn-soft" target="_blank" style="font-size:.83rem;padding:.5rem 1.2rem;">💙 <?= $store_name ?></a>
-          <a href="<?= $bot_invite ?>" class="btn btn-primary" target="_blank" style="font-size:.83rem;padding:.5rem 1.2rem;">🤖 เชิญบอท</a>
+          <a href="https://discord.gg/t6gxZYzMQT" class="btn btn-soft" target="_blank" style="font-size:.83rem;padding:.5rem 1.2rem;">💙 BPXZ STORE</a>
+          <a href="https://discord.com/oauth2/authorize?client_id=1467101968068776199&permissions=8&integration_type=0&scope=bot" class="btn btn-primary" target="_blank" style="font-size:.83rem;padding:.5rem 1.2rem;">🤖 เชิญบอท</a>
         </div>
       </div>
     </div>
@@ -648,13 +654,13 @@
 </section>
 
 <footer>
-  <div class="footer-logo"><?= $bot_name ?></div>
+  <div class="footer-logo">วิล เซอร์ฟอท (Bot)</div>
   <div class="footer-links">
-    <a href="<?= $server_inv ?>"  target="_blank"><?= $store_name ?></a>
-    <a href="<?= $server_inv2 ?>" target="_blank"><?= $support ?></a>
-    <a href="<?= $bot_invite ?>"  target="_blank">INVITE BOT</a>
+    <a href="https://discord.gg/t6gxZYzMQT"  target="_blank">BPXZ STORE</a>
+    <a href="https://discord.gg/BaU4wUmmME" target="_blank">SUPPORT</a>
+    <a href="https://discord.com/oauth2/authorize?client_id=1467101968068776199&permissions=8&integration_type=0&scope=bot"  target="_blank">INVITE BOT</a>
   </div>
-  <div class="footer-copy">© <?= $year ?> <?= $store_name ?> · <?= $bot_name ?> · All rights reserved 💙</div>
+  <div class="footer-copy">© 2025 BPXZ STORE · วิล เซอร์ฟอท (Bot) · All rights reserved 💙</div>
 </footer>
 
 <script>
@@ -684,7 +690,15 @@
 })();
 
 /* TYPEWRITER */
-const phrases = <?= $typewriter_phrases ?>;
+const phrases = [
+  'ดูแลเซิร์ฟเวอร์ตลอด 24 ชั่วโมง 🌙',
+  'ออนช่อง Voice อัตโนมัติ ไม่มีหลุด 🔊',
+  'เปลี่ยนชื่อช่องตามตารางเวลา ✏️',
+  'ระบบ Blacklist คน ยศ และเซิร์ฟ 🚫',
+  'ส่ง DM ทุกคนในเซิร์ฟได้พร้อมกัน 📨',
+  'ควบคุมผ่าน Dashboard ใน Discord 📊',
+  'บอทคนไทย โดย BPXZ STORE 💙'
+];
 let pIdx=0,cIdx=0,del=false;
 const typedEl=document.getElementById('typed');
 function type(){
