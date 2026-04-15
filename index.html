@@ -78,11 +78,15 @@
     }
     .nav-logo-blob {
       width: 36px; height: 36px;
-      background: linear-gradient(135deg, var(--blue1), var(--periwinkle));
-      border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
-      display: flex; align-items: center; justify-content: center; font-size: 1rem;
+      border-radius: 50%;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
       box-shadow: 0 4px 14px rgba(90,157,224,0.4);
-      animation: blob-morph 5s ease-in-out infinite;
+      border: 2px solid rgba(133,184,240,0.4);
+      flex-shrink: 0;
+    }
+    .nav-logo-blob img {
+      width: 100%; height: 100%; object-fit: cover;
     }
     @keyframes blob-morph {
       0%,100% { border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%; }
@@ -456,49 +460,25 @@
 <body>
 
 <script>
-// ❌ ปิดคลิกขวา
 document.addEventListener("contextmenu", e => e.preventDefault());
-
-// ❌ กันปุ่มลัด
 document.onkeydown = function(e) {
   if (e.keyCode == 123) return false;
   if (e.ctrlKey && e.shiftKey && [73,74,67].includes(e.keyCode)) return false;
   if (e.ctrlKey && e.keyCode == 85) return false;
 };
-
-// 🔥 ตรวจ DevTools แบบหลายวิธี
 function detectDevTools() {
   const threshold = 160;
-
-  // วิธี 1: ตรวจขนาดหน้าต่าง
   if (window.outerWidth - window.innerWidth > threshold ||
-      window.outerHeight - window.innerHeight > threshold) {
-    return true;
-  }
-
-  // วิธี 2: debugger trap
-  let start = new Date();
-  debugger;
-  let end = new Date();
-  if (end - start > 100) {
-    return true;
-  }
-
+      window.outerHeight - window.innerHeight > threshold) return true;
+  let start = new Date(); debugger; let end = new Date();
+  if (end - start > 100) return true;
   return false;
 }
-
-// 💀 ถ้าเปิด → เล่นงานเลย
 setInterval(() => {
   if (detectDevTools()) {
     document.body.innerHTML = "";
     document.body.style.background = "#000";
-    document.body.innerHTML = `
-      <h1 style="color:red;text-align:center;margin-top:20%">
-        🚫 DON'T INSPECT BRO
-      </h1>
-    `;
-    // หรือจะ redirect ก็ได้
-    // window.location.href = "https://google.com";
+    document.body.innerHTML = `<h1 style="color:red;text-align:center;margin-top:20%">🚫 DON'T INSPECT BRO</h1>`;
   }
 }, 500);
 </script>
@@ -507,7 +487,10 @@ setInterval(() => {
 
 <nav>
   <a href="#" class="nav-logo">
-    <div class="nav-logo-blob">💙</div>
+    <div class="nav-logo-blob">
+      <img src="https://s13.gifyu.com/images/bqz8Z.gif" alt="วิล เซอร์ฟอท (Bot)"
+           onerror="this.style.display='none';this.parentElement.innerHTML='💙'"/>
+    </div>
     วิล เซอร์ฟอท (Bot)
   </a>
   <ul>
@@ -700,7 +683,7 @@ setInterval(() => {
   <div class="footer-links">
     <a href="https://discord.gg/t6gxZYzMQT"  target="_blank">BPXZ STORE</a>
     <a href="https://discord.gg/BaU4wUmmME" target="_blank">SUPPORT</a>
-    <a href="https://discord.com/oauth2/authorize?client_id=1467101968068776199&permissions=8&integration_type=0&scope=bot"  target="_blank">INVITE BOT</a>
+    <a href="https://discord.com/oauth2/authorize?client_id=1467101968068776199&permissions=8&integration_type=0&scope=bot" target="_blank">INVITE BOT</a>
   </div>
   <div class="footer-copy">© 2025 BPXZ STORE · วิล เซอร์ฟอท (Bot) · All rights reserved 💙</div>
 </footer>
