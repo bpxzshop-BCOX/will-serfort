@@ -459,22 +459,48 @@
 // ❌ ปิดคลิกขวา
 document.addEventListener("contextmenu", e => e.preventDefault());
 
-// ❌ ปิดปุ่ม DevTools
+// ❌ กันปุ่มลัด
 document.onkeydown = function(e) {
-  if (e.keyCode == 123) return false; // F12
-  if (e.ctrlKey && e.shiftKey && e.keyCode == 73) return false; // Ctrl+Shift+I
-  if (e.ctrlKey && e.shiftKey && e.keyCode == 74) return false; // Ctrl+Shift+J
-  if (e.ctrlKey && e.keyCode == 85) return false; // Ctrl+U
+  if (e.keyCode == 123) return false;
+  if (e.ctrlKey && e.shiftKey && [73,74,67].includes(e.keyCode)) return false;
+  if (e.ctrlKey && e.keyCode == 85) return false;
 };
 
-// 🔥 ตรวจจับ DevTools (โหดขึ้น)
-setInterval(function() {
-  const widthThreshold = window.outerWidth - window.innerWidth > 160;
-  const heightThreshold = window.outerHeight - window.innerHeight > 160;
-  if (widthThreshold || heightThreshold) {
-    document.body.innerHTML = "<h1 style='color:red;text-align:center;margin-top:20%'>🚫 ห้ามเปิด Inspect</h1>";
+// 🔥 ตรวจ DevTools แบบหลายวิธี
+function detectDevTools() {
+  const threshold = 160;
+
+  // วิธี 1: ตรวจขนาดหน้าต่าง
+  if (window.outerWidth - window.innerWidth > threshold ||
+      window.outerHeight - window.innerHeight > threshold) {
+    return true;
   }
-}, 1000);
+
+  // วิธี 2: debugger trap
+  let start = new Date();
+  debugger;
+  let end = new Date();
+  if (end - start > 100) {
+    return true;
+  }
+
+  return false;
+}
+
+// 💀 ถ้าเปิด → เล่นงานเลย
+setInterval(() => {
+  if (detectDevTools()) {
+    document.body.innerHTML = "";
+    document.body.style.background = "#000";
+    document.body.innerHTML = `
+      <h1 style="color:red;text-align:center;margin-top:20%">
+        🚫 DON'T INSPECT BRO
+      </h1>
+    `;
+    // หรือจะ redirect ก็ได้
+    // window.location.href = "https://google.com";
+  }
+}, 500);
 </script>
 
 <div class="bg-shapes" id="bgShapes"></div>
