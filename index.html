@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>วิล เซอร์ฟอท (Bot) — ดูแลเซิร์ฟเวอร์ตลอด 24 ชั่วโมง</title>
-  <link rel="icon" href="https://s13.gifyu.com/images/bqQSw.png" type="image/png">
+  <link rel="icon" href="https://s13.gifyu.com/images/bqQS0.jpg" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700;900&family=Itim&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -454,6 +454,28 @@
   </style>
 </head>
 <body>
+
+<script>
+// ❌ ปิดคลิกขวา
+document.addEventListener("contextmenu", e => e.preventDefault());
+
+// ❌ ปิดปุ่ม DevTools
+document.onkeydown = function(e) {
+  if (e.keyCode == 123) return false; // F12
+  if (e.ctrlKey && e.shiftKey && e.keyCode == 73) return false; // Ctrl+Shift+I
+  if (e.ctrlKey && e.shiftKey && e.keyCode == 74) return false; // Ctrl+Shift+J
+  if (e.ctrlKey && e.keyCode == 85) return false; // Ctrl+U
+};
+
+// 🔥 ตรวจจับ DevTools (โหดขึ้น)
+setInterval(function() {
+  const widthThreshold = window.outerWidth - window.innerWidth > 160;
+  const heightThreshold = window.outerHeight - window.innerHeight > 160;
+  if (widthThreshold || heightThreshold) {
+    document.body.innerHTML = "<h1 style='color:red;text-align:center;margin-top:20%'>🚫 ห้ามเปิด Inspect</h1>";
+  }
+}, 1000);
+</script>
 
 <div class="bg-shapes" id="bgShapes"></div>
 
