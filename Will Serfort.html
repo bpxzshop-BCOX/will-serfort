@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Will Serfort - Discord Bot</title>
+  <meta name="description" content="เชิญบอทมาฮิรุ">
+  <link rel="icon" href="favicon.png" sizes="512x512" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700;900&family=Itim&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue1:   #b8d8f8;
+      --blue2:   #85b8f0;
+      --blue3:   #5a9de0;
+      --blue4:   #3a7dc8;
+      --sky1:    #c8eaff;
+      --sky2:    #a0d4ff;
+      --sky3:    #70bcff;
+      --periwinkle: #c0c8f8;
+      --periwinkle2: #a0aaee;
+      --mint:    #c0f0e8;
+      --white:   #ffffff;
+      --cream:   #f0f8ff;
+      --text:    #2a4a6b;
+      --muted:   #6888aa;
+      --soft:    #d8eaf8;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Itim', cursive;
+      background: var(--cream);
+      color: var(--text);
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 600px 500px at 10% 15%,  rgba(184,216,248,0.45) 0%, transparent 70%),
+        radial-gradient(ellipse 500px 400px at 90% 10%,  rgba(192,200,248,0.38) 0%, transparent 70%),
+        radial-gradient(ellipse 400px 500px at 80% 85%,  rgba(192,240,232,0.32) 0%, transparent 70%),
+        radial-gradient(ellipse 500px 350px at 5%  80%,  rgba(160,212,255,0.38) 0%, transparent 70%),
+        radial-gradient(ellipse 300px 300px at 50% 50%,  rgba(200,234,255,0.25) 0%, transparent 70%);
+    }
+
+    .bg-shapes { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .shape {
+      position: absolute; border-radius: 50%; opacity: 0.18;
+      animation: shape-float ease-in-out infinite;
+    }
+    @keyframes shape-float {
+      0%,100% { transform: translateY(0) rotate(0deg) scale(1); }
+      33%      { transform: translateY(-30px) rotate(120deg) scale(1.05); }
+      66%      { transform: translateY(15px) rotate(240deg) scale(0.97); }
+    }
+
+    @keyframes blob-morph {
+      0%,100% { border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%; }
+      25%      { border-radius: 40% 60% 45% 55% / 60% 40% 60% 40%; }
+      50%      { border-radius: 50% 50% 60% 40% / 40% 60% 50% 50%; }
+      75%      { border-radius: 55% 45% 40% 60% / 55% 45% 60% 40%; }
+    }
+    @keyframes gradient-shift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .main-container {
+      position: relative; z-index: 1;
+      display: flex; align-items: center; justify-content: center;
+      padding: 2rem; width: 100%;
+    }
+
+    .bot-card {
+      background: rgba(255,255,255,0.92);
+      border: 2px solid rgba(133,184,240,0.3);
+      border-radius: 32px;
+      padding: 3rem 2.5rem;
+      max-width: 440px; width: 100%;
+      text-align: center;
+      box-shadow: 0 10px 50px rgba(90,157,224,0.12);
+      position: relative; overflow: visible;
+      animation: fadeUp .5s ease both;
+    }
+    .bot-card::before {
+      content: '';
+      position: absolute; top: -18px; right: -18px; width: 110px; height: 110px;
+      background: linear-gradient(135deg,rgba(184,216,248,0.4),rgba(192,200,248,0.35));
+      border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+      animation: blob-morph 7s ease-in-out infinite; z-index: 0;
+    }
+    .bot-card::after {
+      content: '';
+      position: absolute; bottom: -14px; left: -14px; width: 85px; height: 85px;
+      background: linear-gradient(135deg,rgba(192,240,232,0.35),rgba(160,212,255,0.35));
+      border-radius: 40% 60% 45% 55% / 60% 40% 55% 45%;
+      animation: blob-morph 9s ease-in-out infinite reverse; z-index: 0;
+    }
+
+    .profile-wrapper {
+      position: relative; width: 150px; height: 150px; margin: 0 auto 1.4rem;
+    }
+    .av-blob-ring {
+      position: absolute; inset: -14px;
+      background: linear-gradient(135deg, var(--blue1), var(--periwinkle), var(--mint), var(--sky1), var(--blue1));
+      background-size: 300% 300%;
+      border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+      animation: blob-morph 6s ease-in-out infinite, gradient-shift 4s linear infinite;
+      box-shadow: 0 0 30px rgba(90,157,224,0.3);
+    }
+    .av-blob-ring2 {
+      position: absolute; inset: -5px; background: var(--cream);
+      border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+      animation: blob-morph 6s ease-in-out infinite;
+    }
+    .avatar-img-wrap {
+      position: absolute; inset: 0; border-radius: 50%; overflow: hidden;
+      border: 4px solid var(--white);
+      box-shadow: 0 6px 24px rgba(90,157,224,0.18);
+    }
+    .bot-avatar { width: 100%; height: 100%; object-fit: cover; }
+
+    .av-star {
+      position: absolute; font-size: 1rem; pointer-events: none;
+      animation: star-orbit ease-in-out infinite;
+    }
+    .av-star:nth-child(2) { animation-duration: 8s;  top: 8px;  left: 8px; }
+    .av-star:nth-child(3) { animation-duration: 11s; top: 8px;  right: 8px; animation-delay: -3s; }
+    .av-star:nth-child(4) { animation-duration: 9s;  bottom: 8px; left: 12px; animation-delay: -6s; }
+    .av-star:nth-child(5) { animation-duration: 12s; bottom: 8px; right: 12px; animation-delay: -1s; }
+    @keyframes star-orbit {
+      0%,100% { transform: translateY(0) scale(1); opacity: 1; }
+      50%      { transform: translateY(-12px) scale(1.25); opacity: .7; }
+    }
+
+    .online-status {
+      position: absolute; bottom: 10px; right: 10px;
+      width: 18px; height: 18px; border-radius: 50%; background: #5dda9b;
+      border: 3px solid var(--white);
+      box-shadow: 0 0 8px rgba(93,218,155,0.7);
+      animation: pulse-green 2s infinite; z-index: 10;
+    }
+    @keyframes pulse-green {
+      0%,100% { transform: scale(1); }
+      50%      { transform: scale(1.3); }
+    }
+
+    .avatar-status {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: var(--white); border: 2px solid rgba(133,184,240,0.35);
+      border-radius: 30px; padding: .3rem 1rem;
+      font-size: .7rem; color: var(--muted);
+      box-shadow: 0 3px 12px rgba(90,157,224,0.1);
+      margin-bottom: 1.2rem; position: relative; z-index: 1;
+    }
+    .dot-online {
+      width: 7px; height: 7px; border-radius: 50%; background: #5dda9b;
+      box-shadow: 0 0 6px rgba(93,218,155,0.7);
+      animation: pulse-green 2s infinite;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      background: linear-gradient(135deg,rgba(184,216,248,0.4),rgba(192,200,248,0.3));
+      border: 1.5px solid rgba(90,157,224,0.3);
+      border-radius: 20px; padding: .2rem .9rem;
+      font-size: .68rem; color: var(--blue3); font-weight: 700;
+      margin-bottom: .8rem; position: relative; z-index: 1;
+      display: block;
+    }
+
+    .bot-name {
+      font-family: 'Kanit', sans-serif; font-weight: 900; font-size: 2.4rem;
+      background: linear-gradient(90deg, var(--blue3), var(--periwinkle2), var(--sky3));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      line-height: 1.1; margin-bottom: .2rem;
+      position: relative; z-index: 1;
+    }
+    .bot-tag { font-size: .78rem; color: var(--muted); display: block; margin-bottom: 1.2rem; position: relative; z-index: 1; }
+    .bot-description { font-size: .85rem; color: #5a7a9a; line-height: 1.75; margin-bottom: 2rem; position: relative; z-index: 1; }
+
+    .invite-btn {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: linear-gradient(135deg, var(--blue2), var(--periwinkle));
+      color: var(--white); font-family: 'Itim', cursive; font-size: .92rem; font-weight: 700;
+      padding: .8rem 2rem; border-radius: 30px; border: none; cursor: pointer;
+      box-shadow: 0 6px 20px rgba(90,157,224,0.35);
+      transition: all .25s; position: relative; z-index: 1;
+    }
+    .invite-btn:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 10px 28px rgba(90,157,224,0.5); }
+    .invite-btn svg { width: 18px; height: 18px; fill: var(--white); }
+
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(180,210,250,0.35);
+      backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity .25s;
+    }
+    .modal-overlay.show { opacity: 1; pointer-events: all; }
+
+    .modal-box {
+      background: var(--white); border: 2px solid rgba(133,184,240,0.35);
+      border-radius: 24px; padding: 2rem 2rem 1.5rem;
+      max-width: 380px; width: 90%;
+      box-shadow: 0 16px 50px rgba(90,157,224,0.18);
+      text-align: center;
+      transform: translateY(20px); transition: transform .25s;
+    }
+    .modal-overlay.show .modal-box { transform: translateY(0); }
+
+    .modal-title {
+      font-family: 'Kanit', sans-serif; font-weight: 900; font-size: 1.15rem;
+      color: var(--text); margin-bottom: .4rem;
+    }
+    .modal-text { font-size: .78rem; color: var(--muted); margin-bottom: .6rem; }
+    .modal-link {
+      display: block; font-size: .64rem; color: var(--blue3);
+      background: rgba(184,216,248,0.2); border: 1.5px solid rgba(90,157,224,0.2);
+      border-radius: 10px; padding: .5rem .8rem; word-break: break-all;
+      margin-bottom: 1.3rem; line-height: 1.5;
+    }
+    .modal-buttons { display: flex; gap: .7rem; justify-content: center; }
+    .modal-btn {
+      font-family: 'Itim', cursive; font-size: .84rem; font-weight: 700;
+      padding: .55rem 1.5rem; border-radius: 30px; cursor: pointer; transition: all .2s;
+    }
+    .btn-cancel {
+      background: var(--white); border: 2px solid rgba(160,170,238,0.5); color: var(--periwinkle2);
+    }
+    .btn-cancel:hover { background: rgba(192,200,248,0.12); }
+    .btn-confirm {
+      background: linear-gradient(135deg, var(--blue2), var(--periwinkle));
+      color: var(--white); border: none;
+      box-shadow: 0 4px 14px rgba(90,157,224,0.3);
+    }
+    .btn-confirm:hover { transform: translateY(-2px); box-shadow: 0 7px 20px rgba(90,157,224,0.45); }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+  </style>
+</head>
+<body>
+
+<script>
+document.addEventListener("contextmenu", e => e.preventDefault());
+document.onkeydown = function(e) {
+  if (e.keyCode == 123) return false;
+  if (e.ctrlKey && e.shiftKey && [73,74,67].includes(e.keyCode)) return false;
+  if (e.ctrlKey && e.keyCode == 85) return false;
+};
+function detectDevTools() {
+  const threshold = 160;
+  if (window.outerWidth - window.innerWidth > threshold ||
+      window.outerHeight - window.innerHeight > threshold) return true;
+  let start = new Date(); debugger; let end = new Date();
+  if (end - start > 100) return true;
+  return false;
+}
+setInterval(() => {
+  if (detectDevTools()) {
+    document.body.innerHTML = "";
+    document.body.style.background = "#000";
+    document.body.innerHTML = `<h1 style="color:red;text-align:center;margin-top:20%">🚫 DON'T INSPECT BRO</h1>`;
+  }
+}, 500);
+</script>
+
+<div class="bg-shapes" id="bgShapes"></div>
+
+<div class="main-container">
+  <div class="bot-card">
+    <div class="profile-wrapper">
+      <div class="av-blob-ring"></div>
+      <div class="av-blob-ring2"></div>
+      <span class="av-star">✨</span>
+      <span class="av-star">⭐</span>
+      <span class="av-star">🌟</span>
+      <span class="av-star">💫</span>
+      <div class="avatar-img-wrap">
+        <img src="https://s13.gifyu.com/images/bqcQR.jpg" alt="Bot Avatar" class="bot-avatar"
+             onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'"/>
+      </div>
+      <div class="online-status"></div>
+    </div>
+
+    <div class="avatar-status">
+      <div class="dot-online"></div>
+      ONLINE · Will Serfort
+    </div>
+
+    <div class="hero-tag">✨ Discord Bot · Thailand 🇹🇭</div>
+    <h1 class="bot-name">Will Serfort</h1>
+    <span class="bot-tag">ดูแลเซิร์ฟเวอร์ตลอด 24 ชั่วโมง</span>
+    <p class="bot-description"></p>
+
+    <button class="invite-btn" id="inviteBtn">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.71,32.65-1.82,56.63,0.35,80.1a105.77,105.77,0,0,0,32.19,16.26,77.7,77.7,0,0,0,6.89-11.11,68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1,105.25,105.25,0,0,0,32.19-16.26C129.24,52.84,124.79,28.93,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5.12-12.67,11.4-12.67S53.86,46,53.86,53,48.74,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.21,60,73.21,53s5.12-12.67,11.4-12.67S96,46,96,53,90.89,65.69,84.69,65.69Z"/></svg>
+      เชิญบอทเข้าเซิร์ฟเวอร์
+    </button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <h2 class="modal-title">ยืนยันการดำเนินการ</h2>
+    <p class="modal-text">คุณแน่ใจใช่ไหมที่จะไปยัง:</p>
+    <span class="modal-link">https://discord.com/oauth2/authorize?client_id=1467101968068776199&permissions=8&integration_type=0&scope=bot</span>
+    <div class="modal-buttons">
+      <button class="modal-btn btn-cancel" id="cancelBtn">ยกเลิก</button>
+      <button class="modal-btn btn-confirm" id="confirmBtn">ตกลง</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const wrap = document.getElementById('bgShapes');
+  const colors = [
+    'rgba(184,216,248,1)','rgba(192,200,248,1)','rgba(160,212,255,1)',
+    'rgba(192,240,232,1)','rgba(168,204,240,1)','rgba(200,234,255,1)'
+  ];
+  for(let i=0;i<14;i++){
+    const s = document.createElement('div');
+    s.className = 'shape';
+    const size = 80 + Math.random()*180;
+    const c = colors[Math.floor(Math.random()*colors.length)];
+    const r = ()=> 40+Math.random()*30;
+    s.style.cssText = `
+      width:${size}px;height:${size}px;
+      left:${Math.random()*100}%;top:${Math.random()*100}%;
+      background:${c};
+      animation-duration:${10+Math.random()*12}s;
+      animation-delay:-${Math.random()*8}s;
+      border-radius:${r()}% ${r()}% ${r()}% ${r()}% / ${r()}% ${r()}% ${r()}% ${r()}%;
+    `;
+    wrap.appendChild(s);
+  }
+})();
+
+const overlay = document.getElementById('modalOverlay');
+document.getElementById('inviteBtn').onclick = () => overlay.classList.add('show');
+document.getElementById('cancelBtn').onclick  = () => overlay.classList.remove('show');
+document.getElementById('confirmBtn').onclick  = () => {
+  window.open('https://discord.com/oauth2/authorize?client_id=1467101968068776199&permissions=8&integration_type=0&scope=bot','_blank');
+  overlay.classList.remove('show');
+};
+overlay.addEventListener('click', e => { if(e.target === overlay) overlay.classList.remove('show'); });
+</script>
+
+</body>
+</html>
